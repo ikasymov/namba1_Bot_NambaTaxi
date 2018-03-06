@@ -17,7 +17,7 @@ module.exports = {
   },
   sendMessage: async function sendMessage(chatId, content, payload={}){
     const data = {
-      url: 'https://us-central1-nambaonedev.cloudfunctions.net/sendMessage',
+      url: 'https://us-central1-nambaoneprod.cloudfunctions.net/sendMessage',
       method: 'GET',
       qs: {
         contentType: 'text',
@@ -25,7 +25,7 @@ module.exports = {
         chatId: chatId,
       },
       headers: {
-        'Bot-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib3RJZCI6Ii1MNXFhMl9la0xjYVYtUm1qcURXIiwiaWF0IjoxNTE5MTg2OTI3fQ.SQApk7s-QFVGh76sTAd4ElxNn9odPG8T6x6l4tP7PUo'
+        'Bot-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib3RJZCI6Ii1MNnY2ek9zdVpHUDM1SDVtMnRHIiwiaWF0IjoxNTIwMzM2NjgwfQ.vzasvqPtfGnsvLGIXeIUz5WT4afN9sBkojFHKaoRLW4'
       }
     };
     if(payload.buttons){
