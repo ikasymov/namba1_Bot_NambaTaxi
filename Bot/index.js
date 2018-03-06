@@ -1,5 +1,5 @@
 const methods = require('./methods');
-const botMethods = require('./BotMethods');
+const botMethods = require('./botMethods');
 const callbacks = require('./calbackFunctions');
 
 module.exports = {
