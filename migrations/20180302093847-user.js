@@ -30,7 +30,7 @@ module.exports = {
         allowNull: false
       },
       last_address: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: false,
         defaultValue: JSON.stringify([])
       },
