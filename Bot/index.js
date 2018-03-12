@@ -1,6 +1,7 @@
 const methods = require('./methods');
 const botMethods = require('./botMethods');
 const callbacks = require('./calbackFunctions');
+const request = require('request');
 
 module.exports = {
   run: async function(app, req){
@@ -19,12 +20,11 @@ module.exports = {
       const callbackData = JSON.parse(req.body.result.action.content);
       return await callbacks[callbackData.func](app, req, callbackData.arg)
     }
-    const user = await checkUser(req, app);
     const chatId = req.body.result.message.chat.id;
-    // return console.log(await botMethods.sendMessage(chatId, 'Hello', {buttons: [[{title: 'Hello', action: 'Test'}]]}))
+    req.chatId = chatId;
+    const user = await checkUser(req, app);
     if(user){
       req.user = user;
-      req.chatId = chatId;
       req.content = req.body.result.message.content;
       if(req.content === '/help'){
         return botMethods.sendMessage(req.chatId, '/main Выйти в главное меню')
@@ -51,10 +51,26 @@ async function getUser(req, app){
       },
     });
     if(!user){
-      await botMethods.sendMessage(req.body.result.message.chat.id, 'Здравствуйте, это сервис Намба такси, где вы сможете заказать такси в несколько нажатий, для начала введите ваш номер телефона на который вы хотите заказать');
-      const newUser = await db.User.create({name: req.body.result.message.from.name, nambaoneBotId: req.body.result.message.from.id, nambaOneChatId: req.body.result.message.chat.id})
-        await botMethods.setStatus(db, newUser.get('nambaoneBotId'), 'registration', {user_id: newUser.get('id')});
-      return user
+      await botMethods.sendMessage(req.body.result.message.chat.id, 'Здравствуйте, это сервис Намба такси, где вы сможете заказать такси в несколько нажатий');
+      let data = {
+        url: 'https://us-central1-nambaoneprod.cloudfunctions.net/getContact?userId=' + req.body.result.message.from.id,
+        method: 'GET',
+        headers: {
+          'Bot-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib3RJZCI6Ii1MNnY2ek9zdVpHUDM1SDVtMnRHIiwiaWF0IjoxNTIwMzM2NjgwfQ.vzasvqPtfGnsvLGIXeIUz5WT4afN9sBkojFHKaoRLW4'
+        }
+      };
+      const userData = await new Promise((resolve, reject)=>{
+        request(data, (err, res, body)=>{
+          if(err){
+            reject(err)
+          }
+          resolve(JSON.parse(body))
+        });
+      });
+      const newUser = await db.User.create({name: userData.data.name, nambaoneBotId: req.body.result.message.from.id, nambaOneChatId: req.body.result.message.chat.id, phone: userData.data.phone})
+      await botMethods.sendMessage(req.chatId, 'Номер ' + newUser.get('phone') + ' выбран.  Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста');
+      await botMethods.setStatus(db, newUser.get('nambaoneBotId'), 'wait_geo', {user_id: newUser.get('id')});
+      return newUser
     }
     return user
   }catch(e){
