@@ -102,7 +102,7 @@ module.exports = {
     if(userStatus.length > 4){
       userStatus.shift()
     }
-    if(userStatus.slice(-1)[0] !== req.content){
+    if(!userStatus.includes(req.content)){
       userStatus.push(req.content)
     }
     await req.user.update({last_address: JSON.stringify(userStatus), last_order_id: orderId});
