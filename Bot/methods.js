@@ -96,16 +96,8 @@ module.exports = {
       });
     });
     const orderId = body.data.order_id;
-    const userStatus = JSON.parse(req.user.get('last_address'));
     await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'order_access', {user_id: req.user.get('id'), order_id: orderId});
     let status = 0;
-    if(userStatus.length > 4){
-      userStatus.shift()
-    }
-    if(!userStatus.includes(req.content)){
-      userStatus.push(req.content)
-    }
-    await req.user.update({last_address: JSON.stringify(userStatus), last_order_id: orderId});
     const chatId = req.chatId;
     var j = schedule.scheduleJob('*/1 * * * *', async function(){
       let user = await db.User.findOne({where:{
@@ -146,6 +138,15 @@ module.exports = {
             await botMethods.sendMessage(chatId, 'Машина подъехала');
           }
           if(newStatus === 'Completed'){
+            const userStatus = JSON.parse(req.user.get('last_address'));
+  
+            if(userStatus.length > 4){
+              userStatus.shift()
+            }
+            if(!userStatus.includes(req.content)){
+              userStatus.push(req.content)
+            }
+            await req.user.update({last_address: JSON.stringify(userStatus), last_order_id: orderId});
             await botMethods.sendMessage(chatId, 'Ваша поездка составила ' + dataBody.data.trip_cost + ' сома');
             await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')});
             await botMethods.sendMessage(req.chatId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест')
