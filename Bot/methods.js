@@ -63,7 +63,10 @@ module.exports = {
             resolve(botMethods.sendMessage(req.chatId, 'Ваша поездка составила ' + dataBody.data.trip_cost + ' сома'))
           }
           if(newStatus === 'Rejected'){
-            resolve(methods.cancel(app, req, {order_id: arg.order_id}))
+            return botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
+              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Ваш заказ был отменен'))
+            })
+            
           }
         }
       })
