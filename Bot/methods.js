@@ -63,8 +63,9 @@ module.exports = {
             resolve(botMethods.sendMessage(req.chatId, 'Ваша поездка составила ' + dataBody.data.trip_cost + ' сома'))
           }
           if(newStatus === 'Rejected'){
+            
             return botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
-              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Ваш заказ был отменен'))
+              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Ваш заказ был отменен\n Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест'))
             })
             
           }
