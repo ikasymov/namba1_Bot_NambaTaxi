@@ -4,9 +4,9 @@ const botMethods = require('./botMethods');
 module.exports = {
   cancel: async function(app, req, arg){
     const db = app.get('db');
-    if(req.user.last_order_id !== arg.order_id){
-      return botMethods.editMessage(req.chatId, req.messageId, 'Ваш текущий заказ другой')
-    }
+    // if(req.user.last_order_id !== arg.order_id){
+    //   return botMethods.editMessage(req.chatId, req.messageId, 'Ваш текущий заказ другой')
+    // }
     try{
       await new Promise((resolve, reject)=>{
         request('https://api.taxi.namba1.co/order/status/' + arg.order_id, (error, res, body)=>{
