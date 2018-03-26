@@ -42,7 +42,6 @@ module.exports = {
       })
     });
     await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')})
-    await botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменен');
     await req.user.update({last_order_id: 0});
     const userStatus = JSON.parse(req.user.get('last_address'));
     let keyboard = false;
@@ -51,7 +50,7 @@ module.exports = {
         return [{title: object, action: object}]
       })
     }
-    return await botMethods.editMessage(req.chatId, req.messageId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест', keyboard ? {keyboard: keyboard}: {})
+    return botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменен \n Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест', keyboard ? {keyboard: keyboard}: {});
   },
   resume: async function(app, req, arg){
     if(req.user.get('last_order_id') !== arg.order_id){

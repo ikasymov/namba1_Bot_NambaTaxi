@@ -48,6 +48,7 @@ module.exports = {
         contentType: 'text',
         content: content,
         chatId: chatId,
+        messageId: messageId
       },
       headers: {
         'Bot-Auth-Token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib3RJZCI6Ii1MNnY2ek9zdVpHUDM1SDVtMnRHIiwiaWF0IjoxNTIwMzM2NjgwfQ.vzasvqPtfGnsvLGIXeIUz5WT4afN9sBkojFHKaoRLW4'
