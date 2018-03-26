@@ -5,7 +5,7 @@ module.exports = {
   cancel: async function(app, req, arg){
     const db = app.get('db');
     if(req.user.last_order_id !== arg.order_id){
-      return botMethods.sendMessage(req.chatId, 'Ваш текущий заказ другой')
+      return botMethods.editMessage(req.chatId, req.messageId, 'Ваш текущий заказ другой')
     }
     try{
       await new Promise((resolve, reject)=>{
@@ -15,11 +15,11 @@ module.exports = {
           }
           const dataBody = JSON.parse(body);
           if(!dataBody.success){
-            reject(botMethods.sendMessage(req.chatId, 'Ваш заказ был отменен'));
+            reject(botMethods.editMessage(req.chatId, req.messageId,  'Ваш заказ был отменен'));
           }
           const newStatus = dataBody.data.status;
           if(newStatus === 'Received' || newStatus === 'The taxi arrived', newStatus === 'Completed'){
-            return reject(botMethods.sendMessage(req.chatId, 'Вы не можете отменить этот заказ'))
+            return reject(botMethods.editMessage(req.chatId, req.messageId, 'Вы не можете отменить этот заказ'))
           }
           resolve()
         })
@@ -35,14 +35,14 @@ module.exports = {
     await new Promise((resolve, reject)=>{
       request(data, (error, res, body)=>{
         if(error){
-          resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Ошибка попробуйте позже'))
+          resolve(botMethods.editMessage(req.user.nambaOneChatId, req.messageId, 'Ошибка попробуйте позже'))
         }else{
           resolve(body)
         }
       })
     });
     await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')})
-    await botMethods.sendMessage(req.chatId, 'Ваш заказ был отменен');
+    await botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменен');
     await req.user.update({last_order_id: 0});
     const userStatus = JSON.parse(req.user.get('last_address'));
     let keyboard = false;
@@ -51,15 +51,16 @@ module.exports = {
         return [{title: object, action: object}]
       })
     }
-    return await botMethods.sendMessage(req.chatId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест', keyboard ? {keyboard: keyboard}: {})
+    return await botMethods.editMessage(req.chatId, req.messageId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест', keyboard ? {keyboard: keyboard}: {})
   },
   resume: async function(app, req, arg){
     if(req.user.get('last_order_id') !== arg.order_id){
-      return botMethods.sendMessage(req.chatId, 'Ваш текущий заказ другой')
+      return botMethods.editMessage(req.chatId, req.messageId, 'Ваш текущий заказ другой')
     }
     const userAddress = JSON.parse(req.user.get('last_address'));
     req.content = userAddress.slice(-1)[0];
-    req.body.result.message = {type: 'text'}
+    req.body.result.message = {type: 'text'};
+    await botMethods.editMessage(req.chatId, req.messageId, 'Секунду...');
     return await require('./methods').wait_geo(app, req, {});
   }
 };

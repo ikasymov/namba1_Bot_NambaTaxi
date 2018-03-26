@@ -12,6 +12,7 @@ module.exports = {
       // chatIdList.pop();
       // req.chatId = chatIdList.join('');
       req.chatId = req.body.result.action.chatId;
+      req.messageId = req.body.result.action.messageId
       req.user = await db.User.findOne({
         where:{
           nambaoneBotId: req.body.result.action.sender.id
