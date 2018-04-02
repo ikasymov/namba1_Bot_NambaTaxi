@@ -47,9 +47,8 @@ module.exports = {
           });
         }else{
           const newStatus = dataBody.data.status;
-          const lastAddress = JSON.parse(req.user.get('last_address'))
           if(newStatus === 'New order'){
-            resolve(botMethods.sendMessage(req.chatId, 'Ваш заказ по адресу ' +  lastAddress.slice(-1)[0] + ' был принят'))
+            resolve(botMethods.sendMessage(req.chatId, 'Ваш заказ был принят'))
           }
           if(newStatus === 'Received'){
             var message = util.format('Такси выехало, %s, гос.номер %s, номер водителя %s, Имя водителя %s', dataBody.data.driver.make,
