@@ -41,8 +41,8 @@ module.exports = {
         const dataBody = JSON.parse(body);
         if(!dataBody.success){
           botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
-            botMethods.sendMessage(req.chatId, 'Ваш заказ был отменен').then(()=>{
-              resolve(botMethods.sendMessage(req.chatId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста'))
+            botMethods.sendMessage(req.chatId, 'Ваш заказ был отменён.').then(()=>{
+              resolve(botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.'))
             })
           });
         }else{
@@ -64,7 +64,7 @@ module.exports = {
           if(newStatus === 'Rejected'){
             
             return botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
-              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Ваш заказ был отменен\n Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест'))
+              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.'))
             })
             
           }
@@ -74,6 +74,9 @@ module.exports = {
   },
   wait_geo: async function(app,req, arg){
     const db = app.get('db');
+    if(req.body.result.message.type !== 'text' || req.body.result.message.type !== 'location'){
+      return botMethods.sendMessage(req.chatId, 'Пожалуйста, повторите запрос в текстовом формате.')
+    }
     if(req.body.result.message.type === 'location'){
       const geo = await getGeo(req.body.result.message.latitude, req.body.result.message.longitude)
       if(geo){
@@ -152,7 +155,7 @@ module.exports = {
             await req.user.update({last_address: JSON.stringify(userStatus), last_order_id: orderId});
             await botMethods.sendMessage(chatId, 'Ваша поездка составила ' + dataBody.data.trip_cost + ' сома');
             await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')});
-            await botMethods.sendMessage(req.chatId, 'Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест')
+            await botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.')
             j.cancel();
           }
           if(newStatus === 'Rejected'){

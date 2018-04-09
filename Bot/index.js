@@ -52,7 +52,7 @@ async function getUser(req, app){
       },
     });
     if(!user){
-      await botMethods.sendMessage(req.body.result.message.chat.id, 'Здравствуйте, это сервис Намба такси, где вы сможете заказать такси в несколько нажатий');
+      await botMethods.sendMessage(req.body.result.message.chat.id, 'Здравствуйте! Вас приветствует сервис Namba Taxi');
       let data = {
         url: 'https://us-central1-nambaoneprod.cloudfunctions.net/getContact?userId=' + req.body.result.message.from.id,
         method: 'GET',

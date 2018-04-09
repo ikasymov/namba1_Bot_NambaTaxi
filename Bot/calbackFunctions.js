@@ -15,7 +15,7 @@ module.exports = {
           }
           const dataBody = JSON.parse(body);
           if(!dataBody.success){
-            reject(botMethods.editMessage(req.chatId, req.messageId,  'Ваш заказ был отменен'));
+            reject(botMethods.editMessage(req.chatId, req.messageId,  'Ваш заказ был отменён.'));
           }
           const newStatus = dataBody.data.status;
           if(newStatus === 'Received' || newStatus === 'The taxi arrived', newStatus === 'Completed'){
@@ -51,7 +51,7 @@ module.exports = {
         return [{title: object, action: object}]
       })
     }
-    return botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменен \n Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста либо выберите из уже ранее выбранный мест', keyboard ? {keyboard: keyboard}: {});
+    return botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменён. \n Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.', keyboard ? {keyboard: keyboard}: {});
   },
   resume: async function(app, req, arg){
     if(req.user.get('last_order_id') !== arg.order_id){
