@@ -42,7 +42,7 @@ module.exports = {
         if(!dataBody.success){
           botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
             botMethods.sendMessage(req.chatId, 'Ваш заказ был отменён.').then(()=>{
-              resolve(botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.'))
+              resolve(botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете: \n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.'))
             })
           });
         }else{
@@ -64,7 +64,7 @@ module.exports = {
           if(newStatus === 'Rejected'){
             
             return botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')}).then(()=>{
-              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.'))
+              resolve(botMethods.sendMessage(req.user.nambaOneChatId, 'Чтобы заказать такси вы можете: \n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.'))
             })
             
           }
@@ -155,7 +155,7 @@ module.exports = {
             await req.user.update({last_address: JSON.stringify(userStatus), last_order_id: orderId});
             await botMethods.sendMessage(chatId, 'Ваша поездка составила ' + dataBody.data.trip_cost + ' сома');
             await botMethods.setStatus(db, req.user.get('nambaoneBotId'), 'wait_geo', {user_id: req.user.get('id')});
-            await botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете:\n1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. 3. Выбрать в меню из предыдущих заказов.')
+            await botMethods.sendMessage(req.chatId, 'Чтобы заказать такси вы можете:\n 1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.')
             j.cancel();
           }
           if(newStatus === 'Rejected'){
