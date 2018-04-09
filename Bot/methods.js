@@ -74,7 +74,7 @@ module.exports = {
   },
   wait_geo: async function(app,req, arg){
     const db = app.get('db');
-    if(req.body.result.message.type !== 'text' || req.body.result.message.type !== 'location'){
+    if(req.body.result.message.type !== 'text' && req.body.result.message.type !== 'location'){
       return botMethods.sendMessage(req.chatId, 'Пожалуйста, повторите запрос в текстовом формате.')
     }
     if(req.body.result.message.type === 'location'){
