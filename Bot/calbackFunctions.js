@@ -52,7 +52,7 @@ module.exports = {
       })
     }
     console.log(req.messageId, req.chatId);
-    console.log(await botMethods.editMessage(req.chatId, req.messageId, 'Ваш заказ был отменён. \n Чтобы заказать такси вы можете: \n 1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.', keyboard ? {keyboard: keyboard}: {}))
+    console.log(await botMethods.editMessage(req.chatId, req.messageId, 'что-то другое', keyboard ? {keyboard: keyboard}: {}))
     return;
   },
   resume: async function(app, req, arg){
