@@ -56,11 +56,7 @@ module.exports = {
     return;
   },
   resume: async function(app, req, arg){
-    if(req.user.get('last_order_id') !== arg.order_id){
-      return botMethods.editMessage(req.chatId, req.messageId, 'Ваш текущий заказ другой')
-    }
-    const userAddress = JSON.parse(req.user.get('last_address'));
-    req.content = userAddress.slice(-1)[0];
+    req.content = arg.order;
     req.body.result.message = {type: 'text'};
     await botMethods.editMessage(req.chatId, req.messageId, 'Секунду...');
     return await require('./methods').wait_geo(app, req, {});
