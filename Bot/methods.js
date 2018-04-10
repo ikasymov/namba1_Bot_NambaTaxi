@@ -159,9 +159,7 @@ module.exports = {
             j.cancel();
           }
           if(newStatus === 'Rejected'){
-            if(user.get('last_order_id') === orderId){
               await botMethods.sendMessage(chatId, 'К сожалению, по близости маши нет, хотите ли вы продолжить поиск? (команды «Отменить» для отмены, «Продолжить» для продолжение поиска)', {buttons: [[{title: 'Отменить заказ', action: JSON.stringify({func: 'cancel', arg:{order_id: orderId}})}, {title: 'Продолжить', action: JSON.stringify({func: 'resume', arg: {order_id: orderId}})}]]});
-            }
             j.cancel();
           }
         }
