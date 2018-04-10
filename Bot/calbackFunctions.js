@@ -19,6 +19,7 @@ module.exports = {
           }
           const newStatus = dataBody.data.status;
           if(newStatus === 'Received' || newStatus === 'The taxi arrived', newStatus === 'Completed'){
+            console.log('testovyi')
             return botMethods.editMessage(req.chatId, req.messageId, 'Вы не можете отменить этот заказ').then(reject)
           }
           resolve()
