@@ -11,11 +11,13 @@ module.exports = {
       await new Promise((resolve, reject)=>{
         request('https://api.taxi.namba1.co/order/status/' + arg.order_id, (error, res, body)=>{
           if(error){
-            return reject(botMethods.sendMessage(req.chatId, 'Ошибка, попробуйте по позже'))
+            console.log('testerror')
+            return botMethods.sendMessage(req.chatId, 'Ошибка, попробуйте по позже').then(reject)
           }
           const dataBody = JSON.parse(body);
           if(!dataBody.success){
-            reject(botMethods.editMessage(req.chatId, req.messageId,  'Ваш заказ был отменён.'));
+            console.log('test11')
+            return botMethods.editMessage(req.chatId, req.messageId,  'Ваш заказ был отменён.').then(reject);
           }
           const newStatus = dataBody.data.status;
           if(newStatus === 'Received' || newStatus === 'The taxi arrived', newStatus === 'Completed'){
