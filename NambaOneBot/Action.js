@@ -32,6 +32,7 @@ module.exports = ()=>{
         id: arg.order_id
       }});
       const order = await self.taxiMethods.createOrder(self.user.phone, orderObject.get('address'), '');
+      console.log(order)
       await self.editMessage('Ваш заказ принять', self.messageId);
       await orderObject.update({order_id: order.data.order_id});
       await self.setStatus('orderAccess', {order_id: orderObject.get('order_id')});
