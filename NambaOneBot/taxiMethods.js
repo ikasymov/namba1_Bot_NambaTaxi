@@ -46,6 +46,7 @@ module.exports = function(app, config){
         },
         json: true
       };
+      console.log(data.url)
       request(data, (error, response, body)=>{
         if(error){
           reject(error)
