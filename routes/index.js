@@ -11,10 +11,7 @@ module.exports = function (app) {
   
   
   router.post('/nambaone', function (req, res, next) {
-    console.log(req.body)
-    // return res.json({success: true})
     nambaoneBot.run(app, req).then(function (result) {
-      // console.log(result);
       return res.json({
         success: true,
         message: 'ok'

@@ -8,13 +8,15 @@ var bodyParser = require('body-parser');
 var db = require('./models/index');
 var app = express();
 var glob = require('glob');
-const nambaoneBot = require('./Bot/index');
+var config = require('./config');
+const nambaoneBot = require('./NambaOneBot/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('db', db);
-app.set('nambaoneBot', nambaoneBot)
+app.set('config', config);
+app.set('nambaoneBot', nambaoneBot);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -26,7 +28,11 @@ var routes = glob.sync(path.normalize(__dirname) + '/routes/*.js');
 routes.forEach(function(route) {
   require(route)(app);
 });
-
+// var bots = glob.sync(path.normalize(__dirname) + '/Bot/*.js');
+// const botMethods =
+//  bots.forEach(function(botMethod) {
+//   require(botMethod)(app);
+// });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
