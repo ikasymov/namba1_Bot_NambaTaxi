@@ -31,8 +31,10 @@ module.exports = ()=>{
       const orderObject = await db.Order.findOne({where:{
         id: arg.order_id
       }});
+      if(orderObject.order_id){
+        return;
+      }
       const order = await self.taxiMethods.createOrder(self.user.phone, orderObject.get('address'), '');
-      console.log(order)
       await self.editMessage('Ваш заказ принять', self.messageId);
       await orderObject.update({order_id: order.data.order_id});
       await self.setStatus('orderAccess', {order_id: orderObject.get('order_id')});

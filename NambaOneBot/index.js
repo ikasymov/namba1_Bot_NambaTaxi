@@ -13,6 +13,9 @@ module.exports = {
       if(message.Method[message.user.status.func]){
         return message.Method[message.user.status.func]()
       }else{
+        if(message.user.status.func === 'wait_geo'){
+          return;
+        }
         await message.sendMessage('Номер ' + message.user.phone + ' выбран.  Для создания нового заказа приложите вашу геолокацию или наберите адрес вручную в поле ввода текста');
         return message.setStatus('wait_geo', {user_id: message.user.id});
       }
