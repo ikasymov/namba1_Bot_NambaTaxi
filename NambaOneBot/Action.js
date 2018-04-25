@@ -53,6 +53,9 @@ module.exports = ()=>{
     await self.taxiMethods.cancelOrder(order.get('order_id'));
     await order.update({status: 'Rejected'});
     const orderAll = await db.Order.findAll({
+      where:{
+        user_id: self.request.user.id
+      },
       attributes: [
         [db.Sequelize.fn('DISTINCT', db.Sequelize.col('address')) ,'address'],
       ]
