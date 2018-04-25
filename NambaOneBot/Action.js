@@ -38,7 +38,7 @@ module.exports = ()=>{
       await self.editMessage('Ваш заказ принять', self.messageId);
       await orderObject.update({order_id: order.data.order_id});
       await self.setStatus('orderAccess', {order_id: orderObject.get('order_id')});
-      return self.Method.schedule(orderObject.get('id'), 'New order')
+      return await self.Method.schedule(orderObject.get('id'), 'New order')
     }
   };
   
@@ -64,7 +64,7 @@ module.exports = ()=>{
       });
     }
     await self.setStatus('wait_geo', {user_id: self.user.id});
-    return self.editMessage('Ваш заказ был отменён. \n Чтобы заказать такси вы можете: \n 1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.', self.messageId,  keyboard ? {keyboard: keyboard}: {})
+    return await self.editMessage('Ваш заказ был отменён. \n Чтобы заказать такси вы можете: \n 1. Набрать адрес вручную в поле ввода.\n 2. Отправить метку на карте. \n 3. Выбрать в меню из предыдущих заказов.', self.messageId,  keyboard ? {keyboard: keyboard}: {})
   };
   
   Action.prototype.resume = async function(){
@@ -80,7 +80,7 @@ module.exports = ()=>{
     const order = await self.taxiMethods.createOrder(self.user.phone, orderObject.get('address'), orderObject.get('comment') || '');
     await orderObject.update({status: 'New order'});
     await self.setStatus('orderAccess', {order_id: orderObject.get('order_id')});
-    return self.Method.schedule(orderObject.get('id'), orderObject.get('status'))
+    return await self.Method.schedule(orderObject.get('id'), orderObject.get('status'))
   };
   return {Action}
 };

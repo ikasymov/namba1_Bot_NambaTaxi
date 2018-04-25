@@ -11,7 +11,7 @@ module.exports = {
       const message = new Message(app, req, config);
       await message.init();
       if(message.Method[message.user.status.func]){
-        return message.Method[message.user.status.func]()
+        return await message.Method[message.user.status.func]()
       }else{
         if(message.user.status.func === 'wait_geo'){
           return;
