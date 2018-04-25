@@ -54,7 +54,8 @@ module.exports = ()=>{
     await order.update({status: 'Rejected'});
     const orderAll = await db.Order.findAll({
       where:{
-        user_id: self.user.id
+        user_id: self.user.id,
+        status: 'Completed'
       },
       attributes: [
         [db.Sequelize.fn('DISTINCT', db.Sequelize.col('address')) ,'address'],
