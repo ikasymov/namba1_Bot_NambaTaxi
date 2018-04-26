@@ -35,7 +35,7 @@ module.exports = ()=>{
         return;
       }
       const order = await self.taxiMethods.createOrder(self.user.phone, orderObject.get('address'), '');
-      await self.editMessage('Ваш заказ принять', self.messageId);
+      await self.editMessage('Ваш заказ принят', self.messageId);
       await orderObject.update({order_id: order.data.order_id});
       await self.setStatus('orderAccess', {order_id: orderObject.get('order_id')});
       return await self.Method.schedule(orderObject.get('id'), 'New order')
